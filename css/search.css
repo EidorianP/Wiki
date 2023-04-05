@@ -1,42 +1,45 @@
 @import url(https://fonts.googleapis.com/css?family=Open+Sans);
 
-body{
-  font-family: 'Open Sans', sans-serif;
-
+body {
+    font-family: 'Open Sans', sans-serif;
 }
 
 .gamesearch {
-  width: 50px;
-  height: 36px;
-  position: relative;
-  display: flex;
-  align-content: center;
+    width: 50px;
+    height: 36px;
+    position: relative;
+    display: flex;
+    align-content: center;
 }
 
 .gamesearchTerm {
-  width: 20%;
-  border: 3px solid #5c6a86;
-  padding: 5px;
-  height: 36px;
-  border-radius: 5px 0 0 5px;
-  outline: none;
-  color: #7c9288;
+    width: 20%;
+    border: 3px solid #5c6a86;
+    padding: 5px;
+    height: 36px;
+    border-radius: 5px 0 0 5px;
+    outline: none;
+    color: #7c9288;
 }
 
-.gamesearchTerm:focus{
-  color: #5c6a86;
+.gamesearchTerm:focus {
+    color: #5c6a86;
 }
 
 .gamesearchButton {
-  width: 40px;
-  height: 36px;
-  border: 1px solid #5c6a86;
-  background: #5c6a86;
-  text-align: center;
-  color: #fff;
-  border-radius: 0 5px 5px 0;
-  cursor: pointer;
-  font-size: 17.5px;
+    width: 40px;
+    height: 36px;
+    border: 1px solid #5c6a86;
+    background: #5c6a86;
+    text-align: center;
+    color: #fff;
+    border-radius: 0 5px 5px 0;
+    cursor: pointer;
+    font-size: 17.5px;
+}
+
+.highlight {
+  background-color: yellow;
 }
 
 
