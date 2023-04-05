@@ -1,0 +1,112 @@
+html(lang='en')
+  head
+
+    title Connexion
+
+  link(rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Montserrat:wght@700&family=Open+Sans:ital,wght@0,400;0,700;1,400&display=swap')
+  link(rel='stylesheet' type='text/css' href='bootstrap.min.css')
+  link(rel='stylesheet' type='text/css' href='swiper.css')
+  link(rel='stylesheet' type='text/css' href='styles.css')
+  link(rel='stylesheet' type='text/css' href='search.css')
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css")
+  link(rel='icon' href='images/favicon.png')
+
+
+  body
+nav#navbarExample.navbar.navbar-expand-lg.fixed-top.navbar-dark(aria-label='Main navigation')
+  .container
+    a.navbar-brand.logo-text(href='index.html') RandoWiki
+    button#navbarSideCollapse.navbar-toggler.p-0.border-0(type='button' aria-label='Toggle navigation')
+      span.navbar-toggler-icon
+    #navbarsExampleDefault.navbar-collapse.offcanvas-collapse
+      ul.navbar-nav.ms-auto.navbar-nav-scroll
+        li.nav-item
+          a.nav-link(href='index.html') Accueil
+        li.nav-item
+          a.nav-link(href='jeu.html') Jeu
+        li.nav-item
+          a.nav-link(href='premium.html') Premium
+        li.nav-item
+          a.nav-link(href='connexion.html') Se connecter
+      span.nav-item.social-icons
+        span.fa-stack
+          a(href='#your-link')
+            i.fas.fa-circle.fa-stack-2x
+            i.fab.fa-facebook-f.fa-stack-1x
+        span.fa-stack
+          a(href='#your-link')
+            i.fas.fa-circle.fa-stack-2x
+            i.fab.fa-twitter.fa-stack-1x
+
+header.ex-header-centered.bg-dark-blue
+  .container
+    .row
+      .col-xl-10.offset-xl-1
+        h1 ET C&apos;EST PARTI
+
+header.ex-header-game-centered-top
+
+    input.gamesearchTerm(type='text' name='q' placeholder='Rechercher')
+    button.gamesearchButton(type='submit')
+      i.fa.fa-search
+
+
+.ex-title
+  .container
+    .row
+      .col-xl-13.ex-header-centered-top
+          h2  #{title}
+
+    .row 
+      .col-xl-13.ex-header-centered-top
+          h5!= extract
+
+
+.footer.bg-dark-blue
+  .container
+    .row
+      .col-lg-12
+        .footer-col.first
+          h6 A propos
+          p.p-small
+            | RandoWiki est un site gratuit, d&eacute;velopp&eacute; par Adrien Vilette et Jordan Renard, avec l&apos;aide de ChatGPT ainsi que des donn&eacute;es de Jean Michel Fauconnier.
+        .footer-col.second
+        .footer-col.third
+          span.fa-stack
+            a(href='#your-link')
+              i.fas.fa-circle.fa-stack-2x
+              i.fab.fa-facebook-f.fa-stack-1x
+          span.fa-stack
+            a(href='#your-link')
+              i.fas.fa-circle.fa-stack-2x
+              i.fab.fa-twitter.fa-stack-1x
+          span.fa-stack
+            a(href='#your-link')
+              i.fas.fa-circle.fa-stack-2x
+              i.fab.fa-pinterest-p.fa-stack-1x
+          span.fa-stack
+            a(href='#your-link')
+              i.fas.fa-circle.fa-stack-2x
+              i.fab.fa-instagram.fa-stack-1x
+          p.p-small
+            | Pour toute demande, merci de nous contacter ! 
+            a(href='mailto:contact@site.com')
+              strong contact@RandoWiki.com
+.copyright.bg-dark-blue
+  .container
+    .row
+      .col-lg-12
+        p.p-small
+          | Copyright &copy; 
+          a(href='#your-link') Adrien Vilette
+
+    script(src='bootstrap.min.js' type='text/javascript')
+    script(src='purecounter.min.js' type='text/javascript')
+    script(src='replaceme.min.js' type='text/javascript')
+    script(src='requetewiki.js' type='text/javascript')
+    script(src='scripts.js' type='text/javascript')
+    script(src='swiper.min.js' type='text/javascript')
+
+
+
+
