@@ -40,7 +40,7 @@ app.get('/test', async (req, res) => {
     };
 
     const renderPage = async (title, extract) => {
-        const regex = /[^\s]+/g;
+        const regex = /\b[\wàâçéèêëîïôûùüÿñ]+\b/gi;
         extract = extract.replace(regex, (match) => `<span class="highlight" style="--match-length: ${match.length};">${match.length}</span>`);
         res.render('gamepagepug', {title: title, extract: extract});
     };
