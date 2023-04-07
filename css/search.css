@@ -39,7 +39,13 @@ body {
 }
 
 .highlight {
-  background-color: yellow;
-}
-
-
+    background-color: black;
+    font-size: medium;
+    min-width: 20px;
+    display: inline-block;
+    color: white;
+    border-radius: 5px;
+    padding: 0px 3px;
+    --match-length: 1;
+    width: calc(var(--match-length) * 10px);
+  }
