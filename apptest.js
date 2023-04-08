@@ -8,6 +8,14 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static('css'));
 app.use(express.static('js'));
 
+/*app.use((req, res, next) => {
+    if (app.locals.extract !== '') {
+        next();
+    }
+    app.locals.extract = '';
+    next();
+});*/
+
 app.get('/test', async (req, res) => {
     const getRandomPageTitle = async () => {
         const params = {
@@ -47,13 +55,13 @@ app.get('/test', async (req, res) => {
 
     const retryIfConditionsNotMet = async () => {
         const title = await getRandomPageTitle();
-        const extract = await getExtract(title);
+        app.locals.extract = await getExtract(title);
 
-        if (extract.length < 600 || extract.length > 1100) {
-            console.log(`Extract length: ${extract.length} Retrying...`);
+        if (app.locals.extract.length < 600 || app.locals.extract.length > 1100) {
+            console.log(`Extract length: ${app.locals.extract.length} Retrying...`);
             await retryIfConditionsNotMet();
         } else {
-            await renderPage(title, extract);
+            await renderPage(title, app.locals.extract);
         }
     };
 
@@ -61,6 +69,21 @@ app.get('/test', async (req, res) => {
         console.log(error);
         res.status(500).json({message: 'Erreur lors de la requête'});
     });
+});
+
+app.get('/search', async (req, res) => {
+    const searchQuery = req.query.query;
+    const regex = new RegExp(searchQuery, "gi");
+
+    console.log(app.locals);
+
+    if (regex.test(app.locals.extract)) {
+        console.log(`Le mot "${searchQuery}" a été trouvé dans le texte.`);
+    } else {
+        console.log(`Le mot "${searchQuery}" n'a pas été trouvé dans le texte.`);
+    }
+
+    res.send('okay');
 });
 
 app.listen(3000);
