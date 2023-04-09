@@ -59,46 +59,6 @@
             </div>
         </nav>
 
-        <?php
-// Vérifiez si le formulaire a été soumis
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-  // Récupérer les informations du formulaire
-  $email = $_POST['email'];
-  $password = $_POST['password'];
-
-  // nique sa mère ca marche pas alors j'echo les trucs
-  echo "Email : ".$_POST['email']."<br>";
-  echo "Password : ".$_POST['password']."<br>";
-
-  // Connexion à la base de données
-  $dsn = 'mysql:host=localhost;dbname=RandoWiki';
-
-  try {
-    $db = new PDO($dsn, $username, $password_db);
-
-    // Vérifier si l'utilisateur existe dans la base de données
-    $query = "SELECT * FROM utilisateurs WHERE email = :email AND password = :password";
-    $statement = $db->prepare($query);
-    $statement->bindValue(':email', $email);
-    $statement->bindValue(':password', $password);
-    $statement->execute();
-
-    // Si l'utilisateur existe
-    if ($statement->rowCount() > 0) {
-      header('Location: index.html');
-      exit();
-    } else {
-      // Si l'utilisateur n'existe pas, afficher un message d'erreur
-      $message = "Identifiants invalides";
-    }
-  } catch (PDOException $e) {
-    // Si une erreur se produit, afficher un message d'erreur
-    $message = "Erreur de connexion à la base de données : " . $e->getMessage();
-  }
-}
-?>
-
-
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
               <div class="row d-flex justify-content-center align-items-center h-100">
@@ -106,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <div class="card bg-dark text-white" style="border-radius: 1rem;">
                     <div class="card-body p-5 text-center">
           
-                      <div class="mb-md-5 mt-md-4 pb-5">
+                      <form class="mb-md-5 mt-md-4 pb-5" method="POST" action="login.php">
           
                         <h2 class="fw-bold mb-2 text-uppercase">Connexion</h2>
 
@@ -124,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           
                         <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Mot de passe oublié?</a></p>
           
-                        <button class="btn btn-outline-light btn-lg px-5" type="submit">Connexion</button>
+                        <button class="btn btn-outline-light btn-lg px-5" type="submit" name="submit">Connexion</button>
           
                         <div class="d-flex justify-content-center text-center mt-4 pt-1">
                           <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
@@ -132,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                           <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
                         </div>
           
-                      </div>
+                      </form>
           
                       <div>
                         <p class="mb-0">Vous n'avez pas de compte? <a href="inscription.php" class="text-white-50 fw-bold">Création</a>
