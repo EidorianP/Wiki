@@ -2,22 +2,6 @@
 
 <html lang="en">
     <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-        
-
-        <meta name="description" content="Your description">
-            <meta name="author" content="Your name">
-
-
-        <meta property="og:site_name" content="" />
-        <meta property="og:site" content="" />
-        <meta property="og:title" content=""/>
-        <meta property="og:description" content="" />
-        <meta property="og:image" content="" />
-        <meta property="og:url" content="" />
-        <meta name="twitter:card" content="summary_large_image">
-
 
         <title>Connexion</title>
 
@@ -74,6 +58,45 @@
                 </div>
             </div>
         </nav>
+
+        <?php
+// Vérifiez si le formulaire a été soumis
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+  // Récupérer les informations du formulaire
+  $email = $_POST['email'];
+  $password = $_POST['password'];
+  echo "Email : ".$_POST['email']."<br>";
+  echo "Password : ".$_POST['password']."<br>";
+
+  // Connexion à la base de données
+  $dsn = 'mysql:host=localhost;dbname=RandoWiki';
+
+  try {
+    $db = new PDO($dsn, $username, $password_db);
+
+    // Vérifiez si l'utilisateur existe dans la base de données
+    $query = "SELECT * FROM utilisateurs WHERE email = :email AND password = :password";
+    $statement = $db->prepare($query);
+    $statement->bindValue(':email', $email);
+    $statement->bindValue(':password', $password);
+    $statement->execute();
+
+    // Si l'utilisateur existe, redirigez-le vers une page de réussite
+    if ($statement->rowCount() > 0) {
+      header('Location: index.html');
+      exit();
+    } else {
+      // Si l'utilisateur n'existe pas, affichez un message d'erreur
+      $message = "Identifiants invalides";
+    }
+  } catch (PDOException $e) {
+    // Si une erreur se produit, affichez un message d'erreur
+    $message = "Erreur de connexion à la base de données : " . $e->getMessage();
+  }
+}
+?>
+
+
         <section class="vh-100 gradient-custom">
             <div class="container py-5 h-100">
               <div class="row d-flex justify-content-center align-items-center h-100">
@@ -84,16 +107,17 @@
                       <div class="mb-md-5 mt-md-4 pb-5">
           
                         <h2 class="fw-bold mb-2 text-uppercase">Connexion</h2>
+
                         <p class="text-white-50 mb-5">Veuilez entrer votre identifiant et votre mot de passe ! </p>
           
                         <div class="form-outline form-white mb-4">
-                          <input type="email" id="typeEmailX" class="form-control form-control-lg" />
-                          <label class="form-label" for="typeEmailX">Email</label>
+                          <input type="email" id="email" name="email" class="form-control form-control-lg" />
+                          <label class="form-label" for="email">Email</label>
                         </div>
           
                         <div class="form-outline form-white mb-4">
-                          <input type="password" id="typePasswordX" class="form-control form-control-lg" />
-                          <label class="form-label" for="typePasswordX">Mot de passe</label>
+                          <input type="password" id="password" name="password" class="form-control form-control-lg" />
+                          <label class="form-label" for="password">Mot de passe</label>
                         </div>
           
                         <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Mot de passe oublié?</a></p>
@@ -109,7 +133,7 @@
                       </div>
           
                       <div>
-                        <p class="mb-0">Vous n'avez pas de compte? <a href="#!" class="text-white-50 fw-bold">Création</a>
+                        <p class="mb-0">Vous n'avez pas de compte? <a href="inscription.php" class="text-white-50 fw-bold">Création</a>
                         </p>
                       </div>
           

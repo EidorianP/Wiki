@@ -38,7 +38,7 @@ body {
     font-size: 17.5px;
 }
 
-.highlight {
+.gamewordfalse {
     background-color: black;
     font-size: medium;
     min-width: 20px;
@@ -48,4 +48,12 @@ body {
     padding: 0px 3px;
     --match-length: 1;
     width: calc(var(--match-length) * 10px);
+  }
+
+.gamewordtrue {
+    font-size: medium;
+    min-width: 20px;
+    display: inline-block;
+    color: rgb(69, 199, 123);
+    padding: 0px 3px;
   }
