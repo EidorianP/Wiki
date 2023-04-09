@@ -65,6 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   // Récupérer les informations du formulaire
   $email = $_POST['email'];
   $password = $_POST['password'];
+
+  // nique sa mère ca marche pas alors j'echo les trucs
   echo "Email : ".$_POST['email']."<br>";
   echo "Password : ".$_POST['password']."<br>";
 
@@ -74,23 +76,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
   try {
     $db = new PDO($dsn, $username, $password_db);
 
-    // Vérifiez si l'utilisateur existe dans la base de données
+    // Vérifier si l'utilisateur existe dans la base de données
     $query = "SELECT * FROM utilisateurs WHERE email = :email AND password = :password";
     $statement = $db->prepare($query);
     $statement->bindValue(':email', $email);
     $statement->bindValue(':password', $password);
     $statement->execute();
 
-    // Si l'utilisateur existe, redirigez-le vers une page de réussite
+    // Si l'utilisateur existe
     if ($statement->rowCount() > 0) {
       header('Location: index.html');
       exit();
     } else {
-      // Si l'utilisateur n'existe pas, affichez un message d'erreur
+      // Si l'utilisateur n'existe pas, afficher un message d'erreur
       $message = "Identifiants invalides";
     }
   } catch (PDOException $e) {
-    // Si une erreur se produit, affichez un message d'erreur
+    // Si une erreur se produit, afficher un message d'erreur
     $message = "Erreur de connexion à la base de données : " . $e->getMessage();
   }
 }
