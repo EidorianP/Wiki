@@ -1,27 +1,24 @@
-include includes/_header
+extends includes/base
 
-header.ex-header-centered.bg-dark-blue
-    .container
-        .row
-            .col-12
-                h1 ET C'EST PARTI
+block content
+    header.ex-header-centered.bg-dark-blue
+        .container
+            .row
+                .col-12
+                    h1 ET C'EST PARTI
+    section.ex-header-game-centered-top
+        input.gamesearchTerm(type='text' name='q' placeholder='Rechercher')
+        button.gamesearchButton(type='submit')
+            i.fa.fa-search
+    .ex-title
+        .container
+            .row
+                .col-12.text-center
+                    h2  #{title}
+            .row
+                .col-12.text-center
+                    h5!= extract
 
-section.ex-header-game-centered-top
-    input.gamesearchTerm(type='text' name='q' placeholder='Rechercher')
-    button.gamesearchButton(type='submit')
-        i.fa.fa-search
-
-
-.ex-title
-    .container
-        .row
-            .col-12.text-center
-                h2  #{title}
-        .row
-            .col-12.text-center
-                h5!= extract
-
-include includes/_footer
 
 
 

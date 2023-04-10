@@ -1,42 +1,45 @@
 const express = require('express');
 const axios = require('axios');
 const app = express();
-const path = require("path");
+const path = require('path');
 const mysql = require('mysql');
 const session = require('express-session');
+const cookieParser = require("cookie-parser");
+
 const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'randomwiki'
-});
-
+    database: 'randomwiki',
+})
 
 app.set('view engine', 'pug')
 app.set("views", path.join(__dirname, "views"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({extended: true}));
 app.use(express.static(path.join(__dirname, 'static')));
 app.use(express.static('css'));
 app.use(express.static('js'));
+app.use(cookieParser());
+const oneDay = 1000 * 60 * 60 * 24;
 app.use(session({
-    secret: 'secret',
-    resave: true,
-    saveUninitialized: true
+    secret: "thisismysecrctekeyfhrgfgrfrty84fwir767",
+    saveUninitialized:true,
+    cookie: { maxAge: oneDay },
+    resave: false
 }));
 
-
-app.get('/test', async (req, res) => {
+app.get('/', async (req, res) => {
     const getRandomPageTitle = async () => {
         const params = {
             action: 'query',
             format: 'json',
             list: 'random',
+            rnlimit: 1,
             rnnamespace: 0,
             srnamespace: 0,
-            rnlimit: 1,
         };
-        const response = await axios.get('https://fr.wikipedia.org/w/api.php', { params: params });
+        const response = await axios.get('https://fr.wikipedia.org/w/api.php', {params: params});
 
         return response.data.query.random[0].title;
     };
@@ -51,7 +54,7 @@ app.get('/test', async (req, res) => {
             exsectionformat: 'plain',
             exlimit: 'max',
         };
-        const response = await axios.get('https://fr.wikipedia.org/w/api.php', { params: params });
+        const response = await axios.get('https://fr.wikipedia.org/w/api.php', {params: params});
         const pageid = Object.keys(response.data.query.pages)[0];
 
         return response.data.query.pages[pageid].extract;
@@ -60,7 +63,7 @@ app.get('/test', async (req, res) => {
     const renderPage = async (title, extract) => {
         const regex = /[\p{L}\d]+/gu;
         extract = extract.replace(regex, (match) => `<span class="gamewordfalse" style="--match-length: ${match.length};">${match.length}</span>`);
-        res.render('gamepagepug', { title: title, extract: extract });
+        res.render('gamepagepug', {title: title, extract: extract, email: req.session.email});
     };
 
     const retryIfConditionsNotMet = async () => {
@@ -77,7 +80,7 @@ app.get('/test', async (req, res) => {
 
     await retryIfConditionsNotMet().catch((error) => {
         console.log(error);
-        res.status(500).json({ message: 'Erreur lors de la requête' });
+        res.status(500).json({message: 'Erreur lors de la requête'});
     });
 });
 
@@ -97,34 +100,52 @@ app.get('/search', async (req, res) => {
 });
 
 //
-app.all('/login', async (req, res) => {
+app.get('/login', async (req, res) => {
+    res.render('login');
+});
+
+app.get('/register', async (req, res) => {
+    res.render('register');
+});
+
+app.get('/register/add', async (req, res) => {
+    // Faire le save du user ici
+    // voir https://blog.logrocket.com/building-simple-login-form-node-js/
+    // Partie insert into notamment
+});
+
+app.post('/login/check', (req, res) => {
+    let session = req.session;
     let email = req.body.email;
     let password = req.body.password;
-    // Ensure the input fields exists and are not empty
+
     if (email && password) {
+        connection.connect((error) => {
+            if (error) {
+                console.log(error)
+            } else {
+                console.log("MySQL connected!")
+            }
+        })
 
         connection.query('SELECT * FROM accounts WHERE email = ? AND password = ?', [email, password], function (error, results, fields) {
             if (error) throw error;
 
             if (results.length > 0) {
-                console.log('bravo')
-                req.session.loggedin = true;
-                req.session.email = email;
+                console.log('bravo');
+                session.loggedin = true;
+                session.email = email;
 
-                 // res.redirect('/home');
+                console.log(session);
+
+                res.redirect('/');
             } else {
-                console.log('Bonjour')
-                // res.send('Incorrect Username and/or Password!');
+                console.log('Incorrect Username and/or Password!');
             }
+
             res.end();
         });
-        console.log(email, password)
     }
-    /*
-       } else {
-           res.render('login')
-       } */
-    res.render('login')
 });
 
 app.listen(3000);
