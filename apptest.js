@@ -60,17 +60,19 @@ app.get('/', async (req, res) => {
         return response.data.query.pages[pageid].extract;
     };
 
+
     const renderPage = async (title, extract) => {
         const regex = /[\p{L}\d]+/gu;
-        extract = extract.replace(regex, (match) => `<span class="gamewordfalse" style="--match-length: ${match.length};">${match.length}</span>`);
-        res.render('gamepagepug', {title: title, extract: extract, email: req.session.email});
+        extract = extract.replace(regex, (match) =>`<span class="gamewordfalse" style="--match-length: ${match.length};">${match.length}</span>`);
+
+        res.render('gamepagepug', {title: title, extract: extract, email: req.session.email, username: req.session.username});
     };
 
     const retryIfConditionsNotMet = async () => {
         const title = await getRandomPageTitle();
         app.locals.extract = await getExtract(title);
 
-        if (app.locals.extract.length < 600 || app.locals.extract.length > 1100) {
+        if (app.locals.extract.length < 600 || app.locals.extract.length > 11100) {
             console.log(`Extract length: ${app.locals.extract.length} Retrying...`);
             await retryIfConditionsNotMet();
         } else {
@@ -85,19 +87,38 @@ app.get('/', async (req, res) => {
 });
 
 app.get('/search', async (req, res) => {
+    
     const searchQuery = req.query.query;
     const regex = new RegExp(searchQuery, "gi");
 
-    console.log(app.locals);
+    // console.log(app.locals);
 
     if (regex.test(app.locals.extract)) {
-        console.log(`Le mot "${searchQuery}" a été trouvé dans le texte.`);
+        const text = app.locals.extract;
+        let position = text.indexOf(searchQuery);
+        console.log(position);
+        //console.log(`Le mot "${searchQuery}" a été trouvé dans le texte.`);
+        const replacedExtract = replaceWordsInExtract(app.locals.extract, searchQuery);
+        //console.log(replacedExtract);
+        return{
+            position:position, word:searchQuery
+        }
+        //res.render('gamepagepug', {title: "Game Page", extract: replacedExtract, email: req.session.email, username: req.session.username});
     } else {
-        console.log(`Le mot "${searchQuery}" n'a pas été trouvé dans le texte.`);
+        //console.log(`Le mot "${searchQuery}" n'a pas été trouvé dans le texte.`);
+        res.send('okay');
     }
-
-    res.send('okay');
 });
+
+function replaceWordsInExtract(extract, searchQuery) {
+    const regex = new RegExp(searchQuery, "gi");
+    return extract.replace(regex, (match) =>
+      `<span class="gamewordtrue" style="--match-length: ${match.length};">${searchQuery}</span>`
+    ).replace(/<span class="gamewordfalse" style="--match-length: (\d+);">(\d+)<\/span>/g, (match, length) =>
+      `<span class="gamewordfalse" style="--match-length: ${length};">${searchQuery.length}</span>`
+    );
+  }
+
 
 //
 app.get('/login', async (req, res) => {
@@ -125,25 +146,30 @@ app.post('/login/check', (req, res) => {
                 console.log(error)
             } else {
                 console.log("MySQL connected!")
+
             }
         })
 
         connection.query('SELECT * FROM accounts WHERE email = ? AND password = ?', [email, password], function (error, results, fields) {
             if (error) throw error;
-
+        
             if (results.length > 0) {
-                console.log('bravo');
+
                 session.loggedin = true;
                 session.email = email;
+                session.username = results[0].username;
+                console.log(req.session);
 
-                console.log(session);
-
+        
                 res.redirect('/');
             } else {
                 console.log('Incorrect Username and/or Password!');
-            }
 
+            }
+        
             res.end();
+        }, () => {
+            console.log("Deuxième requête ok");
         });
     }
 });
