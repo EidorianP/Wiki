@@ -1,25 +1,25 @@
 extends includes/base
 
 block content
-    section
-        .container
-            .row.d-flex.justify-content-center.align-items-center.h-100
-                .col-xl-9
-                    h1.text-white.mb-4 Register
-                    .card(style='border-radius: 15px;')
-                        .card-body
-                        form(method='POST' action='/register/add')
-                            .row.align-items-center.pt-4.pb-3
-                                .col-md-3.ps-5
-                                    h5.mb-0.text-black Full name
-                                .col-md-9.pe-5
-                                    input.form-control.form-control-lg(type='text')
-                            hr.mx-n3
-                            .row.align-items-center.py-3
-                                .col-md-3.ps-5
-                                    h5.mb-0.text-black Email address
-                                .col-md-9.pe-5
-                                    input.form-control.form-control-lg(type='email' placeholder='example@example.com')
-                            hr.mx-n3
-                            .px-5.py-4
-                                button.btn.btn-primary.btn-lg(type='submit') Register
+  section.vh-100.gradient-custom
+    .container.py-5.h-100
+      .row.d-flex.justify-content-center.align-items-center.h-100
+        .col-12.col-md-8.col-lg-6.col-xl-5
+          .card.bg-dark.text-white(style='border-radius: 1rem;')
+            .card-body.p-5.text-center
+              form.mb-md-5.mt-md-4.pb-5(method='POST' action='/register/add')
+                h2.fw-bold.mb-2.text-uppercase INSCRIPTION
+                p.text-white-50.mb-5 Merci de renseigner votre mail, identifiant, et mot de passe !
+                .form-outline.form-white.mb-4
+                  input.form-control.form-control-lg(type='email' name='email')
+                  label.form-label(for='email') Email
+                .form-outline.form-white.mb-4
+                  input.form-control.form-control-lg(type='username' name='username')
+                  label.form-label(for='username') Nom d'utilisateur
+                .form-outline.form-white.mb-4
+                  input.form-control.form-control-lg(type='password' name='password')
+                  label.form-label(for='password') Mot de passe            
+                .form-outline.form-white.mb-4   
+                  input.form-control.form-control-lg(type='password' name='password_confirm')
+                  label.form-label(for='password_confirm') Confirmer le mot de passe                      
+                button.btn.btn-outline-light.btn-lg.px-5(type='submit' name='submit') Créer

@@ -5,6 +5,7 @@ const path = require("path");
 const mysql = require("mysql");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
+const bcrypt = require("bcryptjs");
 
 const connection = mysql.createConnection({
   host: "localhost",
@@ -177,10 +178,34 @@ app.get("/register", async (req, res) => {
   res.render("register");
 });
 
-app.get("/register/add", async (req, res) => {
-  // Faire le save du user ici
-  // voir https://blog.logrocket.com/building-simple-login-form-node-js/
-  // Partie insert into notamment
+app.post("/register/add", async (req, res) => {
+  const { username, email, password, password_confirm } = req.body;
+
+  connection.query('SELECT email FROM accounts WHERE email = ?', [email], async (error, results) => {
+
+    if( results.length > 0 ) {
+    console.log("email déjà utilisé");
+    return res.render('register', {
+        message: 'This email is already in use'
+  
+    })
+}   else if(password !== password_confirm) {
+  console.log("mdp déjà utilisé");
+    return res.render('register', {
+        message: 'Passwords do not match!'
+    })
+}
+
+let hashedPassword = await bcrypt.hash(password, 8)
+
+connection.query('INSERT INTO accounts SET?', {username: username, email: email, password: hashedPassword}, (error, response) => {
+    if(error) {
+        console.log(error)
+    } else {
+      res.redirect("/");
+    }
+})
+ })
 });
 
 app.post("/login/check", (req, res) => {
